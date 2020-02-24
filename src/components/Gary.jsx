@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import '../App.css';
 
 import questions, { LETTERS } from '../constants/questions';
@@ -20,13 +21,39 @@ const Totals = ({ answers }) => (
   </>
 );
 
+Totals.propTypes = {
+  answers: PropTypes.arrayOf(PropTypes.string),
+};
+
+Totals.defaultProps = {
+  answers: [],
+};
+
 const Question = ({ question, onClick, onBack }) => (
   <>
-    <button onClick={() => onClick(question[0].alternative)}>{question[0].body}</button>
-    <button onClick={() => onClick(question[1].alternative)}>{question[1].body}</button>
-    <button onClick={onBack}>Voltar</button>
+    <button type="button" onClick={() => onClick(question[0].alternative)}>
+      {question[0].body}
+    </button>
+    <button type="button" onClick={() => onClick(question[1].alternative)}>
+      {question[1].body}
+    </button>
+    <button type="button" onClick={onBack}>
+      Voltar
+    </button>
   </>
 );
+
+Question.propTypes = {
+  question: PropTypes.arrayOf(PropTypes.shape({ alternative: PropTypes.string, body: PropTypes.string })),
+  onBack: PropTypes.func,
+  onClick: PropTypes.func,
+};
+
+Question.defaultProps = {
+  question: questions[0],
+  onBack: () => {},
+  onClick: () => {},
+};
 
 const Gary = () => {
   const [answers, setAnswers] = useState([]);
@@ -55,9 +82,11 @@ const Gary = () => {
         <br />
         <br />
         {end ? (
-          <button onClick={() => setAnswers([])}>Voltar para início</button>
+          <button type="button" onClick={() => setAnswers([])}>
+            Voltar para início
+          </button>
         ) : (
-          <button onClick={() => toggleResult(!showResult)}>
+          <button type="button" onClick={() => toggleResult(!showResult)}>
             {showResult ? 'Voltar para questionário' : 'Ver resultados'}
           </button>
         )}
